@@ -1,0 +1,17 @@
+/target/
+/log/
+/log/*
+/logs/
+/${logging.path}/
+/LOG_PATH_IS_UNDEFINED/
+/.classpath
+/*.project
+/.settings
+/bin
+/.factorypath
+/.idea
+*.iml
+*.class
+target/
+F/logs/
+logs/
