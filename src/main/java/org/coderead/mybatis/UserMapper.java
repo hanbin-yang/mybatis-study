@@ -2,6 +2,8 @@ package org.coderead.mybatis;
 
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
+import org.coderead.mybatis.bean.Blog;
+import org.coderead.mybatis.bean.Comment;
 import org.coderead.mybatis.bean.User;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 public interface UserMapper {
 
     @Select({" select * from users where id=#{1}"})
+    //@Options(flushCache = Options.FlushCachePolicy.TRUE)
     User selectByid(Integer id);
 
 
@@ -33,4 +36,16 @@ public interface UserMapper {
 
     @Delete("delete from users where id=#{id}")
     int deleteUser(Integer id);
+
+    Blog selectBlogById(Integer id);
+
+    User selectUserByUserId(Integer id);
+    Comment selectCommentByBlogId(Integer id);
+
+    Blog selectBlogByIdLazy(Integer id);
+    Comment selectCommentsByBlog(Integer id);
+
+    Blog selectByBlogIdCollection(Integer id);
+
+    Blog selectByBlogIdCollectionCircu(Integer id);
 }

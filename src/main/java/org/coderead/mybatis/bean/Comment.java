@@ -14,6 +14,16 @@ public class Comment implements java.io.Serializable {
     private String body;
     private User user;
 
+    private Blog blog;
+
+    public Blog getBlog() {
+        return blog;
+    }
+
+    public void setBlog(Blog blog) {
+        this.blog = blog;
+    }
+
     public String getId() {
         return id;
     }

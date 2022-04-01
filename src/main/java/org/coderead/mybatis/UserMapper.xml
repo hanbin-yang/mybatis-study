@@ -4,6 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.coderead.mybatis.UserMapper">
     <!--<cache/>-->
+    
+    <resultMap id="blogMap" type="org.coderead.mybatis.bean.Blog" autoMapping="true">
+        <result column="title" property="title" />
+        <!--<association property="author" column="author_id" select="selectUserByUserId"/>-->
+        <collection property="comments" column="id" select="selectCommentByBlogId" />
+    </resultMap>
+    
+    <resultMap id="commentMap" type="org.coderead.mybatis.bean.Comment" >
+        <association property="blog" column="blog_id" select="selectBlogById" />
+    </resultMap>
+
+    <select id="selectBlogById" resultMap="blogMap">
+        select * from blog where id = #{id}
+    </select>
+
+    <select id="selectUserByUserId" resultType="org.coderead.mybatis.bean.User">
+        select * from users where id =#{userId}
+    </select>
+
+    <select id="selectCommentByBlogId" resultMap="commentMap">
+        select * from comment where blog_id=#{blogId}
+    </select>
+    
+    
     <parameterMap id="paramter_user" type="org.coderead.mybatis.bean.User">
         <parameter property="name" javaType="string"/>
     </parameterMap>
@@ -48,4 +72,45 @@
         where id=#{id}
     </update>
 
+    <!-- 懒加载测试 -->
+    <resultMap id="blogMap2" type="org.coderead.mybatis.bean.Blog" autoMapping="true">
+        <result column="title" property="title" />
+        <collection property="comments" column="id" select="selectCommentsByBlog" fetchType="lazy" />
+    </resultMap>
+    <select id="selectBlogByIdLazy" resultMap="blogMap2">
+        select * from blog where id = #{id}
+    </select>
+    <select id="selectCommentsByBlog" resultType="org.coderead.mybatis.bean.Comment">
+        select * from comment where blog_id=#{blogId}
+    </select>
+
+
+    <resultMap id="blogMap3" type="org.coderead.mybatis.bean.Blog" autoMapping="true">
+        <id column="id" property="id" />
+        <collection property="comments" ofType="org.coderead.mybatis.bean.Comment" autoMapping="true" columnPrefix="comment_" />
+    </resultMap>
+
+    <select id="selectByBlogIdCollection" resultMap="blogMap3">
+        select a.id, a.title, c.id as comment_id,
+        c.body as comment_body
+        from blog a
+        left join comment c on a.id = c.blog_id
+        where a.id = #{id}
+    </select>
+
+    <!-- 循环引用 -->
+    <resultMap id="blogMap4" type="org.coderead.mybatis.bean.Blog" autoMapping="true">
+        <id column="id" property="id" />
+        <collection property="comments" ofType="org.coderead.mybatis.bean.Comment" autoMapping="true" columnPrefix="comment_" >
+            <association property="blog" javaType="org.coderead.mybatis.bean.Blog" resultMap="blogMap4" />
+        </collection>
+    </resultMap>
+
+    <select id="selectByBlogIdCollectionCircu" resultMap="blogMap4">
+        select a.id, a.title, c.id as comment_id,
+               c.body as comment_body
+        from blog a
+                 left join comment c on a.id = c.blog_id
+        where a.id = #{id}
+    </select>
 </mapper>

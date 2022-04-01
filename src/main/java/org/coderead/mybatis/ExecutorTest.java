@@ -24,8 +24,6 @@ import java.util.Map;
  * @date 2020/5/3012:10 AM
  */
 public class ExecutorTest {
-
-
     private Configuration configuration;
     private Connection connection;
     private JdbcTransaction jdbcTransaction;
@@ -40,7 +38,8 @@ public class ExecutorTest {
         InputStream resourceAsStream = ExecutorTest.class.getResourceAsStream("/mybatis-config.xml");
         factory = factoryBuilder.build(resourceAsStream);
         configuration = factory.getConfiguration();
-        jdbcTransaction = new JdbcTransaction(factory.openSession().getConnection());
+        connection = DriverManager.getConnection(JdbcTest.URL, JdbcTest.USERNAME, JdbcTest.PASSWORD);
+        jdbcTransaction = new JdbcTransaction(connection);
         // 获取SQL映射
         ms = configuration.getMappedStatement("org.coderead.mybatis.UserMapper.selectByid");
     }
@@ -83,8 +82,14 @@ public class ExecutorTest {
         executor.doFlushStatements(false);
     }
 
+    @Test
+    public void baseExecutorTest() throws SQLException {
+        SimpleExecutor executor = new SimpleExecutor(configuration, jdbcTransaction);
+        MappedStatement mappedStatement = configuration.getMappedStatement("org.coderead.mybatis.UserMapper.selectByid");
+        executor.query(mappedStatement, 10, RowBounds.DEFAULT,Executor.NO_RESULT_HANDLER);
+        executor.query(mappedStatement, 10, RowBounds.DEFAULT,Executor.NO_RESULT_HANDLER);
 
-
+    }
 
     @Test
     public void cacheExecutorTest() throws SQLException {
@@ -107,5 +112,4 @@ public class ExecutorTest {
         List<Object> list = sqlSession.selectList("org.coderead.mybatis.UserMapper.selectByid", 10);
         System.out.println(list.get(0));
     }
-
 }
