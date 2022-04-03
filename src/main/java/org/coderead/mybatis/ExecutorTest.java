@@ -100,6 +100,15 @@ public class ExecutorTest {
 
         cachingExecutor.query(ms, 10, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLER);
         cachingExecutor.commit(true);
+
+
+        MappedStatement setNameMs = configuration
+                .getMappedStatement("org.coderead.mybatis.UserMapper.setName");
+        Map param = new HashMap<>();
+        param.put("arg0", 10);
+        param.put("arg1", "鲁班大叔 is good man4");
+        cachingExecutor.update(setNameMs, param);
+
         //  提交之后才会更新
         cachingExecutor.query(ms, 10, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLER);
 

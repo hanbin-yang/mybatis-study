@@ -5,8 +5,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import org.coderead.mybatis.bean.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 
 import java.util.List;
@@ -58,14 +63,19 @@ public class FirstCacheTest {
 
     @Test
     public void testBySpring() {
-        /*ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring.xml");
         UserMapper mapper = context.getBean(UserMapper.class);
-        *//*DataSourceTransactionManager txManager = (DataSourceTransactionManager) context.getBean("txManager");
+        //  动态代理                                  动态代理               mybatis
+        //    |                                         |
+        //   \|/                                       \|/
+        // mapper   -> SqlSessionTemplate -> SqlSessionInterceptor -> SqlSessionFactory
 
-        TransactionStatus transaction = txManager.getTransaction(new DefaultTransactionDefinition());*//*
+        DataSourceTransactionManager txManager = (DataSourceTransactionManager) context.getBean("transactionManager");
+        // 手动开启事务
+        TransactionStatus status = txManager.getTransaction(new DefaultTransactionDefinition());
 
         User u1 = mapper.selectByid(10);
         User u2 = mapper.selectByid(10);
-        System.out.println("u1 == u2 " + (u1 == u2));*/
+        System.out.println("u1 == u2 " + (u1 == u2));
     }
 }
