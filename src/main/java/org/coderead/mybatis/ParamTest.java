@@ -50,6 +50,18 @@ public class ParamTest {
     }
 
     @Test
+    public void param2Test() {
+        Integer id = 10;
+        String name = "鲁班大叔";
+        User users = userMapper.selectByIdAndName(id, name);
+        System.out.println("users = " + users.toString());
+
+        User user = userMapper.selectByid(id);
+        System.out.println("user = " + user.toString());
+
+    }
+
+    @Test
     public void test2() {
         List<Object> list = new ArrayList<>();
         ResultHandler resultHandler = new ResultHandler() {
