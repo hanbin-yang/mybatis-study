@@ -49,6 +49,7 @@ public class FirstCacheTest {
         mapper.selectByid(10);
         RowBounds rowBounds = new RowBounds(0, 10);
         List<Object> list = sqlSession.selectList("org.coderead.mybatis.UserMapper.selectByid", 10);
+        System.out.println("end");
     }
 
 

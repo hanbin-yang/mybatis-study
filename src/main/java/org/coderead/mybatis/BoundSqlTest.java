@@ -1,13 +1,8 @@
 package org.coderead.mybatis;
 
-import org.apache.ibatis.scripting.xmltags.DynamicContext;
 import org.apache.ibatis.scripting.xmltags.ExpressionEvaluator;
 import org.coderead.mybatis.bean.Blog;
-import org.coderead.mybatis.bean.User;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author YangHanBin
@@ -22,5 +17,4 @@ public class BoundSqlTest {
         boolean b = evaluator.evaluateBoolean("title != null", blog);
         System.out.println("b = " + b);
     }
-
 }

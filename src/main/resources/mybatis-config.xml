@@ -3,18 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <properties resource="app.properties"/>
 
-     <properties resource="app.properties">
-    </properties>
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
-
     </settings>
     <typeAliases>
     </typeAliases>
 
-    <environments default="dev">
-        <environment id="dev">
+    <environments default="flink">
+        <environment id="flink">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="${jdbc.driver}"/>
@@ -26,6 +24,6 @@
     </environments>
 
     <mappers>
-        <package name="org.coderead.mybatis"/>
+        <mapper resource="mapper/UserMapper.xml"/>
     </mappers>
 </configuration>

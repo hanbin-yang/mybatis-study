@@ -25,7 +25,7 @@ public class SpringMybatisTest {
         // 手动开启事务
         TransactionStatus status = txManager.getTransaction(new DefaultTransactionDefinition());
 
-        User u1 = mapper.selectByid(10);
+        User u1 = mapper.selectUserByUserId(10);
         User u2 = mapper.selectByid(10);
         System.out.println("u1 == u2 " + (u1 == u2));
     }

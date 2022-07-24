@@ -25,14 +25,17 @@ public class MetaObjectTest {
         metaObject.setValue("author.name", "LuBan");
 
         System.out.println(metaObject.getValue("author.name"));
-        String property = metaObject.findProperty("author.phone_number", true);
+        String property = metaObject.findProperty("author.phoneNumber", true);
         System.out.println("property = " + property);
 
+        ArrayList<User> list = new ArrayList<>();
+        list.add(new User());
+
         // 数组不能自动创建
-        metaObject.setValue("comments", new ArrayList<>());
-
+        metaObject.setValue("comments", list);
         metaObject.setValue("comments[0].name", "yhb");
+        Object value = metaObject.getValue("comments[0].name");
 
-        System.out.println(metaObject.getValue("comments[0].name"));
+        System.out.println(value);
     }
 }

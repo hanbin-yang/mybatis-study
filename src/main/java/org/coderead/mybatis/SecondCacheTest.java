@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Properties;
 
 /**
  * @author YangHanBin
@@ -24,9 +26,13 @@ import java.sql.SQLException;
 public class SecondCacheTest {
 
     private Configuration configuration;
+
     private Connection connection;
+
     private JdbcTransaction jdbcTransaction;
+
     private MappedStatement ms;
+
     private SqlSessionFactory factory;
 
     @Before
@@ -34,13 +40,20 @@ public class SecondCacheTest {
         // 获取构建器
         SqlSessionFactoryBuilder factoryBuilder = new SqlSessionFactoryBuilder();
         // 解析XML 并构造会话工厂
-        InputStream resourceAsStream = ExecutorTest.class.getResourceAsStream("/mybatis-config.xml");
-        factory = factoryBuilder.build(resourceAsStream);
-        configuration = factory.getConfiguration();
+        InputStream configSteam = ExecutorTest.class.getResourceAsStream("/mybatis-config.xml");
+        Properties properties = new Properties();
+        properties.setProperty("jdbc.driver", "com.mysql.cj.jdbc.Driver");
+        properties.setProperty("jdbc.url", "jdbc:mysql:///blog?serverTimezone=GMT%2B8");
+        properties.setProperty("jdbc.username", "root");
+        properties.setProperty("jdbc.password", "123456");
+
+        factory = factoryBuilder.build(configSteam, properties);
+        this.configuration = factory.getConfiguration();
+        this.configuration.setLazyLoadTriggerMethods(new HashSet<>());
         connection = DriverManager.getConnection(JdbcTest.URL, JdbcTest.USERNAME, JdbcTest.PASSWORD);
         jdbcTransaction = new JdbcTransaction(connection);
         // 获取SQL映射
-        ms = configuration.getMappedStatement("org.coderead.mybatis.UserMapper.selectByid");
+        ms = this.configuration.getMappedStatement("org.coderead.mybatis.UserMapper.selectByid");
     }
 
     @Test
@@ -54,8 +67,8 @@ public class SecondCacheTest {
 
     @Test
     public void cacheTest2() {
-        SqlSession sqlSession1 = factory.openSession(true);
-        UserMapper mapper1 = sqlSession1.getMapper(UserMapper.class);
+        SqlSession sqlSession = factory.openSession(true);
+        UserMapper mapper1 = sqlSession.getMapper(UserMapper.class);
         mapper1.selectByid3(10);
     }
 

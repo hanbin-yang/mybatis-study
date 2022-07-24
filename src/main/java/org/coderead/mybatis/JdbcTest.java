@@ -35,7 +35,7 @@ public class JdbcTest {
         // 1、获取连接
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         // 2、预编译
-        String sql = "SELECT * FROM users WHERE `name`=?";
+        String sql = "SELECT `id`, `sex`, `age` FROM users WHERE `name`=?";
         PreparedStatement sql1 = connection.prepareStatement(sql);
         sql1.setString(1, "鲁班大叔");
         // 3、执行SQL
@@ -44,6 +44,8 @@ public class JdbcTest {
         ResultSet resultSet = sql1.getResultSet();
         while (resultSet.next()) {
             System.out.println(resultSet.getString(1));
+            System.out.println(resultSet.getString(2));
+            System.out.println(resultSet.getString(3));
         }
         resultSet.close();
         sql1.close();;

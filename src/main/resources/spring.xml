@@ -26,6 +26,7 @@
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!-- 数据源 -->
         <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath*:mapper/*Mapper.xml"/>
     </bean>
 
     <!--4 自动扫描对象关系映射 -->
