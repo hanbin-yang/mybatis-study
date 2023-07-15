@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.script.ScriptEngineManager;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -100,6 +101,8 @@ public class ParamTest {
         SqlSession sqlSession = factory.openSession();
         Blog blog = sqlSession.selectOne("selectByBlogIdCollectionCircu", 10);
         System.out.println("blog = " + blog);
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+
     }
 
     @Test
